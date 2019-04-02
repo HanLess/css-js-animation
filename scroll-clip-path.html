@@ -1,0 +1,76 @@
+<!doctype <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .box{
+            width : 100%;
+            height:3000px;
+            border:1px solid black;
+            position: relative;
+            top:0;
+            left:0;
+        }
+        #one{
+            position: absolute;
+            top:0;
+            left: 0;
+            background-color: red;
+            width: 400px;
+            height:400px;
+        }
+        #two{
+            position: absolute;
+            top:0;
+            left: 0;
+            background-color: blue;
+            width: 400px;
+            height:400px;
+            clip-path: inset(0px 0 0 0)
+        }
+        #parent{
+            position: relative;
+            top:500px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div id="parent">
+                <div id="one"></div>
+                <div id="two"></div>
+        </div>
+    </div>
+    <script>
+        var eleHight = document.querySelector("#two").offsetHeight
+        var parent = document.querySelector("#parent")
+        var two = document.querySelector("#two")
+        var eleTop = parent.offsetTop
+        var lastScrollTop = document.body.scrollTop
+        var defaultPos = false , moved = false
+        window.addEventListener("scroll",(event) => {
+            var scrollTop = document.body.scrollTop
+            if(scrollTop < eleTop && defaultPos){
+                parent.style.top = 500
+                two.style.clipPath = `inset(0px 0 0 0)`
+                defaultPos = false
+            }else if(scrollTop >= eleTop && scrollTop <= (eleTop + eleHight)){
+                parent.style.top = scrollTop
+
+                let inc = scrollTop - 500
+                two.style.clipPath = `inset(${inc}px 0 0 0)`
+
+                defaultPos = true
+                moved = true
+            }else if(scrollTop > (eleTop + eleHight) && moved){
+                parent.style.top = (eleTop + eleHight)
+                two.style.clipPath = `inset(500px 0 0 0)`
+                moved = false
+            }
+        })
+    </script>
+</body>
+</html>
